@@ -57,7 +57,35 @@ app.get('/search', async (req, res) => {
   
   res.render('search-results', { title: 'Search Results', profiles:  profiles.map(profile => profile.toJSON()), interest });
 });
+app.get('/profile/edit/:id', async (req, res) => {
+  const profile = await Profile.findById(req.params.id)
+  if (!profile) {
+    return res.status(404).send('Profile not found');
+  }
 
+  // Convert interests array to a comma-separated string
+  res.render('edit-profile', { title: 'Edit Profile', profile: profile.toJSON() });
+});
+
+
+// Update an existing profile
+// Update an existing profile
+app.post('/profile/edit/:id', async (req, res) => {
+  console.log(`Updating profile with ID: ${req.params.id}`);
+  const { name, age, interests, bio } = req.body;
+  try {
+    await Profile.findByIdAndUpdate(req.params.id, {
+      name,
+      age,
+      interests: interests.split(','),
+      bio
+    });
+    res.redirect('/');
+  } catch (error) {
+    console.error('Error updating profile:', error);
+    res.status(500).send('Error updating profile');
+  }
+});
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}`);
 });

@@ -13,11 +13,13 @@
     {{#each profiles}}
       <li>
         <h3>{{name}}, {{age}}</h3>
+
         {{#if image}}
           <img src="{{image}}" alt="{{name}}'s profile picture" style="max-width: 200px;">
         {{/if}}
         <p>Interests: {{interests}}</p>
         <p>{{bio}}</p>
+       <a href="/profile/edit/{{_id}}">Edit</a>
       </li>
     {{/each}}
   </ul>
